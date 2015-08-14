@@ -1,0 +1,44 @@
+<html ng-app="App">
+    <head>
+        <title>Simple app</title>
+        <link rel="stylesheet" href="resources/libs/bootstrap/css/bootstrap.css"/>
+        <link rel="stylesheet" href="resources/css/style.css"/>
+        <script src="resources/libs/angular/angular-1.4.3.js"></script>
+        <script src="app/main.js"></script>
+        <script src="app/controllers/carController.js"></script>
+        <script src="app/filters/yearFilter.js"></script>
+    </head>
+    <body>
+        <div ng-controller="carController">
+            <h4 name="version">Version: {{ global.version }}</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th><a href="#" ng-click="sortBy('mark')">Mark</a></th>
+                        <th><a href="#" ng-click="sortBy('model')">Model</a></th>
+                        <th><a href="#" ng-click="sortBy('price')">Price</a></th>
+                        <th><a href="#" ng-click="sortBy('year')">Year</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="car in cars">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ car.mark }}</td>
+                        <td>{{ car.model }}</td>
+                        <td class="fix-width-40">{{ car.price | currency: '$ ' }}</td>
+                        <td class="fix-width-40">{{ car.year | formatYear }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button ng-click="randomPrice()" class="btn"><i class="icon-random"></i> Price</button>
+                <button ng-click="randomYear()" class="btn"><i class="icon-random"></i> Year</button>
+            </div>
+            <hr/>
+            <label for="mark">Search cars by: </label>
+            <input id="mark" type="text" placeholder="Mark" ng-model="searchCars">
+            <div ng-repeat="car in cars | filter:{mark:searchCars}"> {{ car.model }} </div>
+        </div>
+    </body>
+</html>
