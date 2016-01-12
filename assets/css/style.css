@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font: 14px/1.4 Georgia, Serif;
+}
+
+label {
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0px;
+}
+
+tr:nth-of-type(odd) {
+    background: #eee;
+}
+
+th {
+    background: #333;
+    color: white;
+    font-weight: bold;
+}
+
+td, th {
+    padding: 6px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.fix-width-100 {
+    width: 100px;
+}
+
+.fix-width-50 {
+    width: 45px;
+}
+
+.margin-right-20 {
+    margin-right: 20px;
+}
+
+.margin-left-20 {
+    margin-left: 20px;
+}
+
+.margin-top-20 {
+    margin-top: 20px;
+}
+
+.charts {
+    margin: 0 auto;
+    text-align: center;
+}
+
+polar, pie {
+    width: 400px;
+    height: 400px;
+    display: inline-block;
+}
+
+/*
+.charts [polar], .charts [pie] {
+    float: left;
+}
+*/
+
+a, a:hover, a:focus {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+span[year-passed] {
+    color: gray;
+}
+
+.icon-pencil-16 {
+    height: 16px;
+    width: 16px;
+    background: url("/assets/img/pencil_16.png") center;
+}
+
+.icon-cross-16 {
+    height: 16px;
+    width: 16px;
+    background: url("/assets/img/cross_16.png") center;
+}

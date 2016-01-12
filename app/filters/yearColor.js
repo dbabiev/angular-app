@@ -1,4 +1,4 @@
-angular.module("App")
+angular.module("app.filter", [])
     .filter("formatYear", function(){
         return function(year){
             var diff = year ? new Date().getFullYear() - year : 0;

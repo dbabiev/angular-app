@@ -1,44 +1,119 @@
-<html ng-app="App">
+<!DOCTYPE html>
+<html ng-app="app">
     <head>
         <title>Simple app</title>
-        <link rel="stylesheet" href="resources/libs/bootstrap/css/bootstrap.css"/>
-        <link rel="stylesheet" href="resources/css/style.css"/>
-        <script src="resources/libs/angular/angular-1.4.3.js"></script>
-        <script src="app/main.js"></script>
-        <script src="app/controllers/carController.js"></script>
-        <script src="app/filters/yearFilter.js"></script>
+        <link rel="stylesheet" href="assets/libs/bootstrap/css/bootstrap.css"/>
+        <link rel="stylesheet" href="assets/css/style.css"/>
+
+        <script src="assets/libs/jquery/jquery-1.9.1.js"></script>
+        <script src="assets/libs/chart/highcharts.js"></script>
+        <script src="assets/libs/chart/highcharts-more.js"></script>
+        <script src="assets/libs/angular/angular-1.4.3.js"></script>
+        <script src="assets/libs/bootstrap/js/bootstrap.min.js"></script>
+        <script src="assets/libs/utils/underscore.js"></script>
+
+        <script src="app/modules.js"></script>
+        <script src="app/services/dataService.js"></script>
+        <script src="app/services/chartService.js"></script>
+        <script src="app/directives/chartDirectives.js"></script>
+        <script src="app/directives/yearDirectives.js"></script>
+        <script src="app/controllers/dataController.js"></script>
+        <script src="app/controllers/crudController.js"></script>
+        <script src="app/controllers/chartController.js"></script>
+        <script src="app/app.js"></script>
     </head>
-    <body>
-        <div ng-controller="carController">
-            <h4 name="version">Version: {{ global.version }}</h4>
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th><a href="#" ng-click="sortBy('mark')">Mark</a></th>
-                        <th><a href="#" ng-click="sortBy('model')">Model</a></th>
-                        <th><a href="#" ng-click="sortBy('price')">Price</a></th>
-                        <th><a href="#" ng-click="sortBy('year')">Year</a></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="car in cars">
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ car.mark }}</td>
-                        <td>{{ car.model }}</td>
-                        <td class="fix-width-40">{{ car.price | currency: '$ ' }}</td>
-                        <td class="fix-width-40">{{ car.year | formatYear }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="btn-group">
-                <button ng-click="randomPrice()" class="btn"><i class="icon-random"></i> Price</button>
-                <button ng-click="randomYear()" class="btn"><i class="icon-random"></i> Year</button>
+    <body class="container-fluid">
+        <div ng-controller="dataController">
+            <div ng-controller="crudController as crudCtrl">
+                <h4 name="version">Version: {{ global.version }}</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th><a href="#" ng-click="crudCtrl.sortBy('mark')">Mark</a></th>
+                            <th><a href="#" ng-click="crudCtrl.sortBy('model')">Model</a></th>
+                            <th><a href="#" ng-click="crudCtrl.sortBy('price')">Price</a></th>
+                            <th><a href="#" ng-click="crudCtrl.sortBy('year')">Year</a></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="car in cars">
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ car.mark }}</td>
+                            <td>{{ car.model }}</td>
+                            <td class="fix-width-100">{{ car.price | currency: '$ ' }}</td>
+                            <td class="fix-width-100">
+                                <span year-color="car.year">{{ car.year }}</span>
+                                <span year-passed="car.year"></span>
+                            </td>
+                            <td class="fix-width-50">
+                                <a href="#dialog" ng-click="crudCtrl.prepareEdit(car.id)" data-toggle="modal"><i class="icon-pencil-16"></i></a>
+                                <a href="#" ng-click="crudCtrl.delete(car.id)"><i class="icon-cross-16"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button href="#dialog" ng-click="_car = {}" class="btn btn-success margin-right-20" data-toggle="modal"><i class="icon-plus icon-white"></i> Add</button>
+                <div class="btn-group">
+                    <button ng-click="crudCtrl.randomPrice()" class="btn"><i class="icon-random"></i> Price</button>
+                    <button ng-click="crudCtrl.randomYear()" class="btn"><i class="icon-random"></i> Year</button>
+                </div>
+                <button ng-click="crudCtrl.randomPrice(); crudCtrl.randomYear()" class="btn margin-left-20"><i class="icon-random"></i> All</button>
+
+                <div id="dialog" class="modal hide fade">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>New car</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form name="form" class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="mark">Mark</label>
+                                <div class="controls">
+                                    <input id="mark" type="text" ng-model="_car.mark" required>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="model">Model</label>
+                                <div class="controls">
+                                    <input id="model" type="text" ng-model="_car.model" required>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="price">Price</label>
+                                <div class="controls">
+                                    <div class="input-prepend input-append">
+                                        <span class="add-on">$</span>
+                                        <input id="price" class="input-medium" type="number" ng-model="_car.price" min="0" required>
+                                        <span class="add-on">.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="year">Year</label>
+                                <div class="controls">
+                                    <input id="year" class="input-mini" type="number" ng-model="_car.year" ng-pattern="/^[0-9]+/" min="0" required>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button ng-click="crudCtrl.save()" class="btn btn-primary">Save</button>
+                        <button class="btn" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
-            <hr/>
-            <label for="mark">Search cars by: </label>
-            <input id="mark" type="text" placeholder="Mark" ng-model="searchCars">
-            <div ng-repeat="car in cars | filter:{mark:searchCars}"> {{ car.model }} </div>
+
+            <div class="margin-top-20"/>
+
+            <div ng-controller="chartController as chartCtrl">
+                <div class="charts">
+                    <!--<div polar title="Car's prices" series-name="Price"></div>-->
+                    <polar title="Car's prices" series-name="Price"></polar>
+                    <pie title="Car's years" series-name="Year"></pie>
+                </div>
+            </div>
         </div>
     </body>
 </html>

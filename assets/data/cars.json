@@ -1,0 +1,7 @@
+[
+    { "id": 1439975032197,  "mark": "Porsche",  "model": "911",   "price": 135000,  "year": 2017 },
+    { "id": 1439975051129,  "mark": "Nissan",   "model": "GT-R",  "price": 80000,   "year": 2012 },
+    { "id": 1439975056033,  "mark": "BMW",      "model": "M3",    "price": 60500,   "year": 2016 },
+    { "id": 1439975060373,  "mark": "Audi",     "model": "S5",    "price": 53000,   "year": 2010 },
+    { "id": 1439975064789,  "mark": "Audi",     "model": "TT",    "price": 40000,   "year": 2015 }
+]
